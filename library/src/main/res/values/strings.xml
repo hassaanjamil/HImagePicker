@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">HImagePickerExample</string>
+    <string name="title_activity_main">Image Picker</string>
+    <string name="pick">Pick</string>
+
+    <string name="reason_storage_permission">Please allow TPL Maps to access storage. Denying it will cause no longer function as intended.</string>
+    <string name="reason_record_permission">Please allow TPL Maps to record audio. Denying it will cause no longer function as intended.</string>
+    <string name="reason_location_permission">Unable to get your location. Please allow TPL Maps to access this device\'s location.</string>
+    <string name="str_retry">Retry</string>
+    <string name="dismiss">Dismiss</string>
+
+    <string name="go_to_settings">Go to Settings</string>
+
+    <string name="str_camera">Camera</string>
+    <string name="str_gallery">Gallery</string>
+    <string name="str_pick_image_from">Pick Image From:</string>
+    <string name="please_wait">Please wait…</string>
+
+</resources>

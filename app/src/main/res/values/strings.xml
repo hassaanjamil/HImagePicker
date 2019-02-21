@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HImagePickerExample</string>
+    <string name="next_activity">Next</string>
+</resources>

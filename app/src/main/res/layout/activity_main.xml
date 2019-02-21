@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hassanjamil.himagepickerexample.MainActivity"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/btnPick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick"
+        android:layout_gravity="center"
+        android:onClick="onPickClick"/>
+
+    <Button
+        android:id="@+id/btnNextActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next_activity"
+        android:layout_gravity="center"
+        android:layout_toRightOf="@+id/btnPick"
+        android:onClick="onNextActivityClick"/>
+
+    <ImageView
+        android:id="@+id/ivPickedImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnPick"
+        />
+
+</RelativeLayout>
