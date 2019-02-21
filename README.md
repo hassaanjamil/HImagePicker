@@ -13,4 +13,4 @@ allprojects {
     }
 }
 ```
-To use the functionality you can get help from app module of the repo.
+> To use the functionality you can get help from [app](https://github.com/hassaanjamil/HImagePicker/tree/master/app) module of the repo.
