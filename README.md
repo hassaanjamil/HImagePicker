@@ -13,3 +13,4 @@ allprojects {
     }
 }
 ```
+To use the functionality you can get help from app module of the repo.
