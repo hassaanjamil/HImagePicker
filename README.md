@@ -1,8 +1,14 @@
 # HImagePicker
-Android Image Picker library
+Android Image Picker Library, provides ease in picking image from android native interfaces of camera and gallery
 
-Version 1.0.1 - ChangeLog
-You can add custom title and strings for camera and gallery option for picker dialog
+### Android Module's Gradle Dependency
+Add dependency
+`implementation 'com.hassanjamil.himagepicker:library:1.0.1'`
 
-Version 1.0
-Added basic funcitonality
+### Project/Root Level Gradle Dependency
+Add artifactory url
+`allprojects {`
+    `repositories {`
+        `maven { url "http://api.tplmaps.com:8081/artifactory/example-repo-local" }`
+    `}`
+`}`
