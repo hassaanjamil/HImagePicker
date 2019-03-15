@@ -4,16 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import com.esafirm.imagepicker.features.ImagePicker;
 import com.example.himagepickerlibrary.R;
 
 import java.io.File;
@@ -29,29 +27,30 @@ import utils.StringUtils;
  * @author hassanjamil
  */
 
-public class ImagePickManager {
+class ImagePickManager {
 
     private static final String TAG = ImagePickManager.class.getSimpleName();
     private AlertDialog mAlertDialog;
-    public static final String KEY_FILE_URI = "file_uri";
+    //public static final String KEY_FILE_URI = "file_uri";
 
-    private ConfigIPicker mLastAddedConfig;
+    private ConfigIPicker mConfig;
 
-    ImagePickManager() {}
+    ImagePickManager() {
+    }
 
     void load(@NonNull ConfigIPicker config) {
 
-        mLastAddedConfig = config;
+        mConfig = config;
 
-        /*if (!(mLastAddedConfig.getContext() instanceof Activity)) {
+        /*if (!(mConfig.getContext() instanceof Activity)) {
             Log.e(TAG, "Context is not an instance of Activity class");
         }*/
 
-        Context context = (mLastAddedConfig.getActivity() != null) ? mLastAddedConfig.getActivity()
-                : mLastAddedConfig.getFragment().getContext();
+        /*Context context = (mConfig.getActivity() != null) ? mConfig.getActivity()
+                : mConfig.getFragment().getContext();*/
 
-        if (checkPermissions(context)) {
-            dialogImageSourceSelection(context, config);
+        if (checkPermissions(mConfig.getActivity())) {
+            dialogImageSourceSelection(mConfig.getActivity(), config);
         }
     }
 
@@ -61,27 +60,24 @@ public class ImagePickManager {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(!(context instanceof Activity)) {
+            if (!(context instanceof Activity)) {
                 return false;
             }
 
-            if (!PermissionUtils.isStoragePermissionGranted((Activity) context)) {
-                PermissionUtils.requestStoragePermission((Activity) context);
+            if (!PermissionUtils.isStorageCameraPermissionGranted((Activity) context)) {
+                PermissionUtils.requestStorageCameraPermission((Activity) context);
                 return false;
             }
-            if (!PermissionUtils.isCameraPermissionGranted((Activity) context)) {
-                PermissionUtils.requestCameraPermission((Activity) context);
-                return false;
-            }
+
         }
         return true;
     }
 
-    private void dialogImageSourceSelection(final Context context, final @NonNull ConfigIPicker config) {
+    private void dialogImageSourceSelection(final Activity activity, final @NonNull ConfigIPicker config) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!PermissionUtils.isStoragePermissionGranted((Activity) context)) {
-                PermissionUtils.requestStoragePermission((Activity) context);
+            if (!PermissionUtils.isStorageCameraPermissionGranted(activity)) {
+                PermissionUtils.requestStorageCameraPermission(activity);
                 return;
             }
         }
@@ -89,21 +85,21 @@ public class ImagePickManager {
         dismissAlertDialog();
 
         final CharSequence[] items = {StringUtils.isValidString(config.getDialogStrCamera()) ?
-                        config.getDialogStrCamera() : context.getString(R.string.str_camera),
+                config.getDialogStrCamera() : activity.getString(R.string.str_camera),
                 StringUtils.isValidString(config.getDialogStrGallery()) ?
-                        config.getDialogStrGallery() : context.getString(R.string.str_gallery)};
+                        config.getDialogStrGallery() : activity.getString(R.string.str_gallery)};
 
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
         alertDialog.setTitle(StringUtils.isValidString(config.getDialogTitle()) ?
-                config.getDialogTitle() : context.getString(R.string.str_pick_image_from));
+                config.getDialogTitle() : activity.getString(R.string.str_pick_image_from));
         alertDialog.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0:
-                        openCameraIntent(context, config.getRequestCodeCamera());
+                        openCameraIntent();
                         break;
                     case 1:
-                        openGalleryIntent(context, config.getRequestCodeGallery());
+                        openGalleryIntent();
                         break;
                 }
                 mAlertDialog.dismiss();
@@ -122,21 +118,62 @@ public class ImagePickManager {
         }
     }
 
-    private void openCameraIntent(Context context, int requestCodeCameraIntent) {
-        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (pictureIntent.resolveActivity(context.getPackageManager()) != null) {
+    private ImagePicker getImagePicker() {
+        ImagePicker imagePicker;
+        if (mConfig.getFragment() == null)
+            imagePicker = ImagePicker.create(mConfig.getActivity());
+        else
+            imagePicker = ImagePicker.create(mConfig.getFragment());
+        imagePicker.language("en") // Set image picker language
+                .theme(R.style.ef_AppTheme)
+                .folderMode(false) // set folder mode (false by default)
+                .includeVideo(false) // include video (false by default)
+                .toolbarArrowColor(Color.WHITE) // set toolbar arrow up color
+                .toolbarFolderTitle("Folder") // folder selection title
+                .toolbarImageTitle("Tap to select") // image selection title
+                .multi() // multi image selection mode
+                .limit(mConfig.limit())// max images can be selected (99 by default)
+                .showCamera(mConfig.showCamera()); // show camera or not (true by default)
+        //.imageDirectory(mConfig.dirName());   // captured image directory name ("Camera" folder by default)
+        //.imageFullDirectory(mConfig.dirPath()); // can be full path
+        //.imageDirectory("Camera")   // captured image directory name ("Camera" folder by default)
+        //.imageFullDirectory(Environment.getExternalStorageDirectory().getPath()); // can be full path
+
+        if (mConfig.include())
+            imagePicker.origin(mConfig.images()); // original selected images, used in multi mode
+        else
+            imagePicker.exclude(mConfig.images());
+
+        return imagePicker;
+    }
+
+    private void openCameraIntent() {
+
+        if (mConfig.getFragment() == null) {
+            ImagePicker.cameraOnly()
+                    .imageFullDirectory(mConfig.dirPath())
+                    .start(mConfig.getActivity());
+        } else {
+            ImagePicker.cameraOnly()
+                    .imageFullDirectory(mConfig.dirPath())
+                    .start(mConfig.getFragment());
+        }
+
+        /*Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
 
             File photoFile;
             try {
-                photoFile = createImageFile(context);
+                photoFile = createImageFile(activity);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-            Uri photoUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", photoFile);
+            Uri photoUri = FileProvider.getUriForFile(activity,
+                    activity.getPackageName() + ".provider", photoFile);
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            ((Activity) context).startActivityForResult(pictureIntent, requestCodeCameraIntent);
-        }
+            activity.startActivityForResult(pictureIntent, requestCodeCameraIntent);
+        }*/
     }
 
     private String mCameraImageFilePath;
@@ -149,15 +186,29 @@ public class ImagePickManager {
         return image;
     }
 
-    private void openGalleryIntent(final Context context, int requestCodeGalleryIntent) {
-        Intent intent = new Intent(Intent.ACTION_PICK,
+    private void openGalleryIntent() {
+        getImagePicker().start(HImagePicker.RC_IMAGE_PICKER);
+
+        /*Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        ((Activity) context).startActivityForResult(intent, requestCodeGalleryIntent);
+        ((Activity) context).startActivityForResult(intent, rcGallery);*/
     }
 
     void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(mLastAddedConfig == null || (requestCode != mLastAddedConfig.getRequestCodeCamera()
-                && requestCode != mLastAddedConfig.getRequestCodeGallery())) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            mConfig.images().clear();
+            mConfig.images().addAll(ImagePicker.getImages(data));
+            //mConfig.setImages(images);
+
+            String[] paths = new String[mConfig.images().size()];
+            for (int i = 0; i < mConfig.images().size(); i++) {
+                paths[i] = mConfig.images().get(i).getPath();
+            }
+            ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, paths);
+        }
+
+        /*if(mConfig == null || (requestCode != mConfig.getRcCamera()
+                && requestCode != mConfig.getRcGallery())) {
             return;
         }
 
@@ -166,7 +217,7 @@ public class ImagePickManager {
                 Bundle bundle = new Bundle();
 
                 bundle.putString(KEY_FILE_URI,
-                        (requestCode == mLastAddedConfig.getRequestCodeCamera()) ? mCameraImageFilePath :
+                        (requestCode == mConfig.getRcCamera()) ? mCameraImageFilePath :
                                 ((data != null && data.getData() != null) ? data.getData().toString()
                                         : null));
                 ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, bundle);
@@ -174,6 +225,14 @@ public class ImagePickManager {
         } catch (Exception e) {
             Log.e(TAG, "Unable to retrieve image");
             e.printStackTrace();
+        }*/
+    }
+
+    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtils.onRequestPermissionResult(mConfig.getActivity(), requestCode, permissions, grantResults);
+
+        if (PermissionUtils.isStorageCameraPermissionGranted(mConfig.getActivity())) {
+            dialogImageSourceSelection(mConfig.getActivity(), mConfig);
         }
     }
 }

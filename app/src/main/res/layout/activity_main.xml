@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/pick"
         android:layout_gravity="center"
-        android:onClick="onPickClick"/>
+        android:onClick="onPickClick" />
 
     <Button
         android:id="@+id/btnNextActivity"
@@ -21,13 +21,13 @@
         android:text="@string/next_activity"
         android:layout_gravity="center"
         android:layout_toRightOf="@+id/btnPick"
-        android:onClick="onNextActivityClick"/>
+        android:onClick="onNextActivityClick"
+        android:layout_toEndOf="@+id/btnPick" />
 
-    <ImageView
-        android:id="@+id/ivPickedImage"
+    <TextView
+        android:id="@+id/tvPickedImages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnPick"
-        />
+        android:layout_below="@+id/btnPick" />
 
 </RelativeLayout>

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
@@ -13,29 +16,39 @@ import com.example.himagepickerlibrary.hImagePicker.HImagePicker;
 
 import models.ConfigIPicker;
 
-public class MainActivity extends AppCompatActivity implements ClassIImagesPick.ImagePick {
+public class ExampleFragment extends Fragment implements ClassIImagesPick.ImagePick {
 
     TextView tvPickedImages;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        tvPickedImages = findViewById(R.id.tvPickedImages);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.example_fragment, container, false);
     }
 
-    public void onPickClick(View view) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        tvPickedImages = view.findViewById(R.id.tvPickedImages);
+        view.findViewById(R.id.btnPick).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickClick();
+            }
+        });
+    }
+
+    public void onPickClick() {
         HImagePicker.getInstance()
-                .config(new ConfigIPicker(MainActivity.this)
+                .config(new ConfigIPicker(this)
                         .setDialogTitle("Pick Image From")
                         .setDialogStrCamera("Camera")
                         .setDialogStrGallery("Gallery")
                         .setListener(this)
-                        .setLimit(1)
+                        .setLimit(5)
                         .setShowCamera(false)
                         .setInclude(true)
-                        .setDirPath(getCustomDirectoryPath(this)))
+                        .setDirPath(getCustomDirectoryPath(getContext())))
                 .load();
     }
 
@@ -57,25 +70,19 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        HImagePicker.getInstance().onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         HImagePicker.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    public void onNextActivityClick(View view) {
-        startActivity(new Intent(this, MyFragmentActivity.class));
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        HImagePicker.getInstance().onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         HImagePicker.getInstance().onDestroy();
     }
 }

@@ -3,10 +3,9 @@ package utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AlertDialog;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.himagepickerlibrary.R;
 import com.example.himagepickerlibrary.hImagePicker.PermissionUtils;
@@ -101,13 +100,13 @@ public class DialogUtils {
         return progressDialog;
     }
 
-    public static void dialogReasonStoragePermission(final Activity activity) {
+    public static void dialogReasonPermission(final Activity activity, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(activity.getString(R.string.reason_storage_permission));
+        builder.setMessage(message);
         builder.setCancelable(false);
         builder.setPositiveButton(activity.getString(R.string.str_retry), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PermissionUtils.requestStoragePermission(activity);
+                PermissionUtils.requestStorageCameraPermission(activity);
             }
         });
         builder.setNegativeButton(activity.getString(R.string.dismiss), new DialogInterface.OnClickListener() {
@@ -118,7 +117,6 @@ public class DialogUtils {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     public static void dialogReasonPermissionSettings(final Activity activity, String message, String[] buttons) {
@@ -184,7 +182,7 @@ public class DialogUtils {
         builder.setCancelable(false);
         builder.setPositiveButton(activity.getString(R.string.str_retry), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PermissionUtils.requestStoragePermission(activity);
+                PermissionUtils.requestStorageCameraPermission(activity);
             }
         });
         builder.setNegativeButton(activity.getString(R.string.dismiss), new DialogInterface.OnClickListener() {

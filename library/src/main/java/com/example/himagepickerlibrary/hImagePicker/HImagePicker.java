@@ -18,6 +18,7 @@ public class HImagePicker {
 
     private static HImagePicker mInstance;
     private ImagePickManager mManager;
+    static final int RC_IMAGE_PICKER = 553;
 
     private HImagePicker() {
         mManager = new ImagePickManager();
@@ -36,8 +37,9 @@ public class HImagePicker {
     }*/
 
     private ArrayList<ConfigIPicker> mConfigs = new ArrayList<>();
+
     public HImagePicker config(@NonNull ConfigIPicker config) {
-        if(!isConfig(config))
+        if (!isConfig(config))
             mConfigs.add(config);
 
         ClassIImagesPick.getInstance().addListener(config.getListener());
@@ -51,7 +53,7 @@ public class HImagePicker {
                     : iConfig.getFragment().getContext();
             Context contextSrc = (config.getActivity() != null) ? config.getActivity()
                     : config.getFragment().getContext();
-            if(contextSrc.getClass().getSimpleName().equals(contextDest.getClass().getSimpleName()))
+            if (contextSrc.getClass().getSimpleName().equals(contextDest.getClass().getSimpleName()))
                 return true;
         }
         return false;
@@ -63,6 +65,10 @@ public class HImagePicker {
         return this;
     }*/
 
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        mManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mManager.onActivityResult(requestCode, resultCode, data);
     }
@@ -72,14 +78,16 @@ public class HImagePicker {
     }
 
     public void onDestroy() {
-        if(mConfigs != null && mConfigs.size() > 0)
-            mConfigs.remove((mConfigs.size() > 0) ? mConfigs.size() - 1 : mConfigs.size());
-        //mManager.setLastAddedConfig(null);
-        ClassIImagesPick.getInstance().removeRecentListener();
+        clearAllConfigs();
+        ClassIImagesPick.getInstance().onDestroy();
+        mInstance = null;
 
+        /*if(mConfigs != null && mConfigs.size() > 0)
+            mConfigs.remove((mConfigs.size() > 0) ? mConfigs.size() - 1 : mConfigs.size());
+        ClassIImagesPick.getInstance().onDestroy();*/
     }
 
-    public void clearAllConfigs() {
+    private void clearAllConfigs() {
         mConfigs.clear();
     }
 

@@ -1,10 +1,12 @@
 package models;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
+
+import java.util.ArrayList;
 
 /**
  * Created by hassanjamil on 3/29/2018.
@@ -14,49 +16,27 @@ import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
 
 public class ConfigIPicker {
 
-    private int requestCodeCamera;
-    private int requestCodeGallery;
     private Activity activity;
     private Fragment fragment;
-    private String filesDirPath;
     private String dialogTitle, dialogStrCamera, dialogStrGallery;
     private ClassIImagesPick.ImagePick listener;
 
+    private ArrayList<Image> images = new ArrayList<>();
+    private String dirPath;
+    private boolean showCamera;
+    private int limit;
+    private boolean include;
+
     /**
-     *
-     * @param requestCodeCamera RequestCode for camera native interface intent
-     * @param requestCodeGallery RequestCode for gallery native interface intent
      * @param activity Activity from where you want to call the functionality
-     * @param dTitle Picker Dialog Title
-     * @param dStrCamera Picker Dialog Camera option string
-     * @param dStrGallery Picker Dialog Camera option string
-     * @param filesDirPath
-     * @param listener
      */
-    public ConfigIPicker(int requestCodeCamera, int requestCodeGallery,
-                         Activity activity, String dTitle, String dStrCamera, String dStrGallery,
-                         String filesDirPath, ClassIImagesPick.ImagePick listener) {
-        this.requestCodeCamera = requestCodeCamera;
-        this.requestCodeGallery = requestCodeGallery;
+    public ConfigIPicker(Activity activity) {
         this.activity = activity;
-        this.dialogTitle = dTitle;
-        this.dialogStrCamera = dStrCamera;
-        this.dialogStrGallery = dStrGallery;
-        this.filesDirPath = filesDirPath;
-        this.listener = listener;
     }
 
-    public ConfigIPicker(int requestCodeCamera, int requestCodeGallery,
-                         Fragment fragment,  String dTitle, String dStrCamera, String dStrGallery,
-                         String filesDirPath, ClassIImagesPick.ImagePick listener) {
-        this.requestCodeCamera = requestCodeCamera;
-        this.requestCodeGallery = requestCodeGallery;
+    public ConfigIPicker(Fragment fragment) {
         this.fragment = fragment;
-        this.dialogTitle = dTitle;
-        this.dialogStrCamera = dStrCamera;
-        this.dialogStrGallery = dStrGallery;
-        this.filesDirPath = filesDirPath;
-        this.listener = listener;
+        setActivity(fragment.getActivity());
     }
 
     public Fragment getFragment() {
@@ -65,17 +45,10 @@ public class ConfigIPicker {
 
     public void setFragment(Fragment fragment) {
         this.fragment = fragment;
+        setActivity(fragment.getActivity());
     }
 
-    public int getRequestCodeCamera() {
-        return requestCodeCamera;
-    }
-
-    public void setRequestCodeCamera(int requestCodeCamera) {
-        this.requestCodeCamera = requestCodeCamera;
-    }
-
-    public Context getActivity() {
+    public Activity getActivity() {
         return activity;
     }
 
@@ -83,51 +56,83 @@ public class ConfigIPicker {
         this.activity = activity;
     }
 
-    public String getFilesDirPath() {
-        return filesDirPath;
-    }
-
-    public void setFilesDirPath(String filesDirPath) {
-        this.filesDirPath = filesDirPath;
-    }
-
     public ClassIImagesPick.ImagePick getListener() {
         return listener;
     }
 
-    public void setListener(ClassIImagesPick.ImagePick listener) {
+    public ConfigIPicker setListener(ClassIImagesPick.ImagePick listener) {
         this.listener = listener;
-    }
-
-    public int getRequestCodeGallery() {
-        return requestCodeGallery;
-    }
-
-    public void setRequestCodeGallery(int requestCodeGallery) {
-        this.requestCodeGallery = requestCodeGallery;
+        return this;
     }
 
     public String getDialogTitle() {
         return dialogTitle;
     }
 
-    public void setDialogTitle(String dialogTitle) {
+    public ConfigIPicker setDialogTitle(String dialogTitle) {
         this.dialogTitle = dialogTitle;
+        return this;
     }
 
     public String getDialogStrCamera() {
         return dialogStrCamera;
     }
 
-    public void setDialogStrCamera(String dialogStrCamera) {
+    public ConfigIPicker setDialogStrCamera(String dialogStrCamera) {
         this.dialogStrCamera = dialogStrCamera;
+        return this;
     }
 
     public String getDialogStrGallery() {
         return dialogStrGallery;
     }
 
-    public void setDialogStrGallery(String dialogStrGallery) {
+    public ConfigIPicker setDialogStrGallery(String dialogStrGallery) {
         this.dialogStrGallery = dialogStrGallery;
+        return this;
+    }
+
+    public String dirPath() {
+        return dirPath;
+    }
+
+    public ConfigIPicker setDirPath(String dirPath) {
+        this.dirPath = dirPath;
+        return this;
+    }
+
+    public boolean showCamera() {
+        return showCamera;
+    }
+
+    public ConfigIPicker setShowCamera(boolean showCamera) {
+        this.showCamera = showCamera;
+        return this;
+    }
+
+    public int limit() {
+        return limit;
+    }
+
+    public ConfigIPicker setLimit(int limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    public boolean include() {
+        return include;
+    }
+
+    public ConfigIPicker setInclude(boolean include) {
+        this.include = include;
+        return this;
+    }
+
+    public ArrayList<Image> images() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Image> images) {
+        this.images = images;
     }
 }

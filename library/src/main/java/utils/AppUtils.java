@@ -2,14 +2,9 @@ package utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
-
-import com.example.himagepickerlibrary.R;
-import com.example.himagepickerlibrary.hImagePicker.PermissionUtils;
 
 public class AppUtils {
 

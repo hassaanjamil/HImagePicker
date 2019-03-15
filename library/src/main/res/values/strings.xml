@@ -6,6 +6,10 @@
     <string name="reason_storage_permission">Please allow TPL Maps to access storage. Denying it will cause no longer function as intended.</string>
     <string name="reason_record_permission">Please allow TPL Maps to record audio. Denying it will cause no longer function as intended.</string>
     <string name="reason_location_permission">Unable to get your location. Please allow TPL Maps to access this device\'s location.</string>
+    <string name="reason_permission_1">Please allow application to the following permissions: </string>
+    <string name="reason_permission_2">Denying it will cause no longer function as intended.</string>
+    <string name="reason_permission_complete">Please allow application to the required permissions. Denying it will cause no longer function as intended.</string>
+
     <string name="str_retry">Retry</string>
     <string name="dismiss">Dismiss</string>
 
