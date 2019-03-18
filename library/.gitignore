@@ -2,5 +2,3 @@
 
 .idea/vcs.xml
 libs/
-/publish.gradle
-/library/publish.gradle
