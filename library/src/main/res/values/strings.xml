@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">HImagePickerExample</string>
-    <string name="title_activity_main">Image Picker</string>
+    <string name="app_name" translatable="false">HImagePickerExample</string>
+    <string name="title_activity_main" translatable="false">Image Picker</string>
     <string name="pick">Pick</string>
 
     <string name="reason_storage_permission">Please allow TPL Maps to access storage. Denying it will cause no longer function as intended.</string>

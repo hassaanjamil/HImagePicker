@@ -1,0 +1,21 @@
+<resources>
+    <string name="pick">منتخب</string>
+
+    <string name="reason_storage_permission">مہربانی فرما کر ایپلیکیشن کو سٹوریج تک رسائی دیں .ایسا نہ کرنے کی صورت میں ایپلیکیشن متوقع کام نہیں کرے گی.</string>
+    <string name="reason_record_permission">مہربانی فرما کر ایپلیکیشن کو آواز ریکارڈ کی رسائی دیں .ایسا نہ کرنے کی صورت میں ایپلیکیشن متوقع کام نہیں کرے گی.</string>
+    <string name="reason_location_permission">آپ کی لوکیشن حاصل کرنے سے قاصر ہیں .مہربانی فرما کر ایپلیکیشن کو لوکیشن کی رسائی دیں.</string>
+    <string name="reason_permission_1">مہربانی فرما کر ایپلیکیشن کو مندرجہ ذیل رسائیاں دیں:</string>
+    <string name="reason_permission_2">ایسا نہ کرنے کی صورت میں ایپلیکیشن متوقع کام نہیں کرے گی.</string>
+    <string name="reason_permission_complete">مہربانی فرما کر ایپلیکیشن کو ضروری رسائیاں دیں .ایسا نہ کرنے کی صورت میں ایپلیکیشن متوقع کام نہیں کرے گی.</string>
+
+    <string name="str_retry">دوبارہ کوشش کریں</string>
+    <string name="dismiss">برطرف</string>
+
+    <string name="go_to_settings">ترتیبات کو جائیے</string>
+
+    <string name="str_camera">کیمرہ</string>
+    <string name="str_gallery">گیلری </string>
+    <string name="str_pick_image_from">تصویر منتخب کریں:</string>
+    <string name="please_wait">انتظار فرمائیے…</string>
+
+</resources>
