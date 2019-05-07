@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AlertDialogRTL" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:layoutDirection">rtl</item>
+        <item name="colorAccent">#03A9F4</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="AlertDialogLTR" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:layoutDirection">ltr</item>
+        <item name="colorAccent">#03A9F4</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+</resources>

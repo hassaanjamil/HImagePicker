@@ -18,7 +18,10 @@ public class ConfigIPicker {
 
     private Activity activity;
     private Fragment fragment;
-    private String dialogTitle, dialogStrCamera, dialogStrGallery;
+    private String dialogTitle;
+    private String dialogStrCamera;
+    private String dialogStrGallery;
+    private String layoutDirection;
     private ClassIImagesPick.ImagePick listener;
 
     private ArrayList<Image> images = new ArrayList<>();
@@ -62,6 +65,15 @@ public class ConfigIPicker {
 
     public ConfigIPicker setListener(ClassIImagesPick.ImagePick listener) {
         this.listener = listener;
+        return this;
+    }
+
+    public String getLayoutDirection() {
+        return layoutDirection;
+    }
+
+    public ConfigIPicker setLayoutDirection(String layoutDirection) {
+        this.layoutDirection = layoutDirection;
         return this;
     }
 

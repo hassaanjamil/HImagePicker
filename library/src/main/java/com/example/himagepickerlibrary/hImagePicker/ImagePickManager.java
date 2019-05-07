@@ -89,10 +89,14 @@ class ImagePickManager {
                 StringUtils.isValidString(config.getDialogStrGallery()) ?
                         config.getDialogStrGallery() : activity.getString(R.string.str_gallery)};
 
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-        alertDialog.setTitle(StringUtils.isValidString(config.getDialogTitle()) ?
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity,
+                !StringUtils.isValidString(config.getLayoutDirection()) || config.getLayoutDirection().equals("ltr")
+                        ? R.style.AlertDialogLTR
+                        : R.style.AlertDialogRTL);
+        alertDialogBuilder.setTitle(StringUtils.isValidString(config.getDialogTitle()) ?
                 config.getDialogTitle() : activity.getString(R.string.str_pick_image_from));
-        alertDialog.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0:
@@ -105,9 +109,9 @@ class ImagePickManager {
                 mAlertDialog.dismiss();
             }
         });
-        alertDialog.setCancelable(true);
+        alertDialogBuilder.setCancelable(true);
 
-        mAlertDialog = alertDialog.create();
+        mAlertDialog = alertDialogBuilder.create();
         mAlertDialog.show();
     }
 
