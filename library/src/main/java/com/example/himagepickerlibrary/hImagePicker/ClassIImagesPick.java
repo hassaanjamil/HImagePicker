@@ -1,12 +1,14 @@
 package com.example.himagepickerlibrary.hImagePicker;
 
+import com.esafirm.imagepicker.model.Image;
+
 import java.util.ArrayList;
 
 public class ClassIImagesPick {
 
     public interface ImagePick {
         //void onImagesPicked(int requestCode, int resultCode, Bundle bundle);
-        void onImagesPicked(int requestCode, int resultCode, String[] paths);
+        void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images);
     }
 
     private static ClassIImagesPick mInstance;
@@ -37,7 +39,7 @@ public class ClassIImagesPick {
         return false;
     }
 
-    void onImagesPicked(int requestCode, int resultCode, String[] paths) {
+    void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images) {
 
         ClassIImagesPick.ImagePick listener = null;
 
@@ -46,11 +48,11 @@ public class ClassIImagesPick {
         }
 
         if (listener != null) {
-            listener.onImagesPicked(requestCode, resultCode, paths);
+            listener.onImagesPicked(requestCode, resultCode, images);
         }
     }
 
-    void removeListeners() {
+    private void removeListeners() {
         mListeners.clear();
         /*if(mListeners != null && mListeners.size() > 0)
             mListeners.remove((mListeners.size() > 0) ? mListeners.size() - 1 : mListeners.size());*/

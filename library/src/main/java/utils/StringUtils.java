@@ -5,9 +5,12 @@ import android.util.Log;
 import android.util.Patterns;
 
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -306,6 +309,12 @@ public class StringUtils {
         }
 
         return getStringForCharset(newString.toString(), charsetName);
+    }
+
+    public static String getCurrentTimeStampInFormat(String format) {
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+        return sdf.format(now);
     }
 
 }

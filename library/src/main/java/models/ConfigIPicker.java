@@ -28,7 +28,8 @@ public class ConfigIPicker {
     private String dirPath;
     private boolean showCamera;
     private int limit;
-    private boolean include;
+    private boolean singleTrue = false, cropMode = false;
+    //private boolean include;
 
     /**
      * @param activity Activity from where you want to call the functionality
@@ -131,20 +132,48 @@ public class ConfigIPicker {
         return this;
     }
 
-    public boolean include() {
+    /*public boolean include() {
         return include;
     }
 
     public ConfigIPicker setInclude(boolean include) {
         this.include = include;
         return this;
-    }
+    }*/
 
     public ArrayList<Image> images() {
         return images;
     }
 
-    public void setImages(ArrayList<Image> images) {
+    public ConfigIPicker setImages(ArrayList<Image> images) {
         this.images = images;
+        return this;
+    }
+
+    public boolean isSingleTrue() {
+        return singleTrue;
+    }
+
+    /**
+     * If you want to pick a singleTrue picture then you should call the funtion.
+     */
+    public ConfigIPicker setSingleTrue() {
+        this.singleTrue = true;
+        return this;
+    }
+
+    public boolean isCropMode() {
+        return cropMode;
+    }
+
+    /**
+     * To enable cropMode mode you must have to call {@link ConfigIPicker#setSingleTrue()}
+     *
+     * @param crop true to enable cropMode mode
+     * @return
+     */
+    public ConfigIPicker setCropMode(boolean crop) {
+        this.cropMode = crop;
+        return this;
     }
 }

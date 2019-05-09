@@ -8,14 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
 import com.example.himagepickerlibrary.hImagePicker.HImagePicker;
+
+import java.util.ArrayList;
 
 import models.ConfigIPicker;
 
 public class MainActivity extends AppCompatActivity implements ClassIImagesPick.ImagePick {
 
-    TextView tvPickedImages;
+    private TextView tvPickedImages;
+    private ArrayList<Image> mImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +30,24 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
     }
 
     public void onPickClick(View view) {
-        HImagePicker.getInstance()
-                .config(new ConfigIPicker(MainActivity.this)
-                        //.setDialogTitle("Pick Image From")
-                        //.setDialogStrCamera("Camera")
-                        //.setDialogStrGallery("Gallery")
-                        .setLayoutDirection("ltr")
-                        .setListener(this)
-                        .setLimit(5)
-                        .setShowCamera(false)
-                        .setInclude(true)
-                        .setDirPath(getCustomDirectoryPath(this)))
-                .load();
+        /*if(mImages.size() > 0)
+            mImages.clear();*/
+        ConfigIPicker config = new ConfigIPicker(MainActivity.this)
+                // Call these functions with translated string resource if working with multiple
+                // locale and call setLayoutDirection("rtl" | "ltr") for rightToLeft or LeftToRight
+                // layout direction of image source selection dialog
+                //.setDialogTitle("Pick Image From")
+                //.setDialogStrCamera("Camera")
+                //.setDialogStrGallery("Gallery")
+                .setLayoutDirection("ltr")
+                //.setLimit(2)
+                .setSingleTrue()
+                .setCropMode(true)
+                .setListener(this)
+                .setShowCamera(false)
+                .setDirPath(getCustomDirectoryPath(this));
+
+        HImagePicker.getInstance().config(config).load();
     }
 
     private String getCustomDirectoryPath(Context context) {
@@ -49,10 +59,17 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
     }
 
     @Override
-    public void onImagesPicked(int requestCode, int resultCode, String[] paths) {
+    public void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images) {
+        // Clearing images array if size > 0
+        /*if(mImages.size() > 0)
+            mImages.clear();
+        // Adding all received images to the array
+        mImages.addAll(images)*/
+
         StringBuilder p = new StringBuilder();
-        for (String path : paths) {
-            p.append("\n").append(path);
+        for (Image image : images) {
+            mImages.add(image);
+            p.append("\n").append(image.getPath());
         }
         tvPickedImages.setText(p);
     }

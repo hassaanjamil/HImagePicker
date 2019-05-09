@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
 import com.example.himagepickerlibrary.hImagePicker.HImagePicker;
+
+import java.util.ArrayList;
 
 import models.ConfigIPicker;
 
@@ -48,7 +51,6 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
                         .setListener(this)
                         .setLimit(2)
                         .setShowCamera(false)
-                        .setInclude(true)
                         .setDirPath(getCustomDirectoryPath(getContext())))
                 .load();
     }
@@ -62,10 +64,10 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
     }
 
     @Override
-    public void onImagesPicked(int requestCode, int resultCode, String[] paths) {
+    public void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images) {
         StringBuilder p = new StringBuilder();
-        for (String path : paths) {
-            p.append("\n").append(path);
+        for (Image image : images) {
+            p.append("\n").append(image.getPath());
         }
         tvPickedImages.setText(p);
     }
