@@ -19,7 +19,6 @@ import models.ConfigIPicker;
 public class MainActivity extends AppCompatActivity implements ClassIImagesPick.ImagePick {
 
     private TextView tvPickedImages;
-    private ArrayList<Image> mImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +32,15 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
         /*if(mImages.size() > 0)
             mImages.clear();*/
         ConfigIPicker config = new ConfigIPicker(MainActivity.this)
-                // Call these functions with translated string resource if working with multiple
+                // Call the function with translated string resource if working with multiple
                 // locale and call setLayoutDirection("rtl" | "ltr") for rightToLeft or LeftToRight
                 // layout direction of image source selection dialog
-                //.setDialogTitle("Pick Image From")
-                //.setDialogStrCamera("Camera")
-                //.setDialogStrGallery("Gallery")
                 .setLayoutDirection("ltr")
-                //.setLimit(2)
+                .setDialogTitle("Pick Image via")
+                .setDialogStrCamera("Camera")
+                .setDialogStrGallery("Gallery")
+                .setLayoutDirection("ltr")
+                .setLimit(1)
                 .setSingleTrue()
                 .setCropMode(true)
                 .setListener(this)
@@ -59,16 +59,9 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
     }
 
     @Override
-    public void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images) {
-        // Clearing images array if size > 0
-        /*if(mImages.size() > 0)
-            mImages.clear();
-        // Adding all received images to the array
-        mImages.addAll(images)*/
-
+    public void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images, boolean isReqFromGallery) {
         StringBuilder p = new StringBuilder();
         for (Image image : images) {
-            mImages.add(image);
             p.append("\n").append(image.getPath());
         }
         tvPickedImages.setText(p);

@@ -25,8 +25,19 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'com.hassanjamil.himagepicker:library:1.04.tpl'
+    implementation 'com.hassanjamil.himagepicker:library:1.06.tpl'
 
-    //implementation project(":library")
-    //implementation 'com.github.esafirm.android-image-picker:imagepicker:1.13.0'
+    /*implementation project(":library")
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:exifinterface:28.0.0'
+    // Material Dialogs Library
+    implementation("com.afollestad.material-dialogs:core:0.9.1.0") {
+        exclude group: 'com.android.support'
+    }
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation ('com.github.esafirm.android-image-picker:imagepicker:1.13.0') {
+        exclude module: 'recyclerview-v7'
+    }
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
+    implementation 'com.github.yalantis:ucrop:2.2.3'*/
 }

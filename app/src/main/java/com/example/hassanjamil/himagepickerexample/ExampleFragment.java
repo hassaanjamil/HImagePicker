@@ -22,6 +22,8 @@ import models.ConfigIPicker;
 public class ExampleFragment extends Fragment implements ClassIImagesPick.ImagePick {
 
     TextView tvPickedImages;
+    ArrayList<Image> mImages = new ArrayList<>();
+    int limit = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +51,9 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
                         //.setDialogStrGallery("Gallery")
                         .setLayoutDirection("rtl")
                         .setListener(this)
-                        .setLimit(2)
+                        .setLimit(limit)
                         .setShowCamera(false)
+                        .include(mImages)
                         .setDirPath(getCustomDirectoryPath(getContext())))
                 .load();
     }
@@ -64,9 +67,18 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
     }
 
     @Override
-    public void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images) {
+    public void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images,
+                               boolean isRequestFromGallery) {
+        if (mImages != null && isRequestFromGallery) {
+            mImages.clear();
+            mImages.addAll(images);
+        } else if (mImages != null) {
+            mImages.add(images.get(0));
+        }
+
+
         StringBuilder p = new StringBuilder();
-        for (Image image : images) {
+        for (Image image : mImages) {
             p.append("\n").append(image.getPath());
         }
         tvPickedImages.setText(p);
