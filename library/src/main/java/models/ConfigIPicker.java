@@ -24,12 +24,12 @@ public class ConfigIPicker {
     private String layoutDirection;
     private ClassIImagesPick.ImagePick listener;
 
-    private ArrayList<Image> images = new ArrayList<>();
+    private ArrayList<Image> incImages = new ArrayList<>();
     private String dirPath;
     private boolean showCamera;
     private int limit;
     private boolean singleTrue = false, cropMode = false;
-    //private boolean include;
+    private boolean isGallery = false;
 
     /**
      * @param activity Activity from where you want to call the functionality
@@ -64,6 +64,10 @@ public class ConfigIPicker {
         return listener;
     }
 
+    /**
+     * @param listener
+     * @return
+     */
     public ConfigIPicker setListener(ClassIImagesPick.ImagePick listener) {
         this.listener = listener;
         return this;
@@ -73,6 +77,11 @@ public class ConfigIPicker {
         return layoutDirection;
     }
 
+    /**
+     * To set layout direction by passing "rtl | ltr" string to the function
+     * @param layoutDirection
+     * @return
+     */
     public ConfigIPicker setLayoutDirection(String layoutDirection) {
         this.layoutDirection = layoutDirection;
         return this;
@@ -123,6 +132,15 @@ public class ConfigIPicker {
         return this;
     }
 
+    public boolean isRequestFromGallery() {
+        return isGallery;
+    }
+
+    public ConfigIPicker setIsRequestFromGallery(boolean isGallery) {
+        this.isGallery = isGallery;
+        return this;
+    }
+
     public int limit() {
         return limit;
     }
@@ -132,21 +150,12 @@ public class ConfigIPicker {
         return this;
     }
 
-    /*public boolean include() {
-        return include;
+    public ArrayList<Image> getIncludeImages() {
+        return incImages;
     }
 
-    public ConfigIPicker setInclude(boolean include) {
-        this.include = include;
-        return this;
-    }*/
-
-    public ArrayList<Image> images() {
-        return images;
-    }
-
-    public ConfigIPicker setImages(ArrayList<Image> images) {
-        this.images = images;
+    public ConfigIPicker include(ArrayList<Image> images) {
+        this.incImages = images;
         return this;
     }
 
@@ -155,7 +164,7 @@ public class ConfigIPicker {
     }
 
     /**
-     * If you want to pick a singleTrue picture then you should call the funtion.
+     * If you want to pick a single picture then you should call the method, you don't need to call setLimit after it.
      */
     public ConfigIPicker setSingleTrue() {
         this.singleTrue = true;

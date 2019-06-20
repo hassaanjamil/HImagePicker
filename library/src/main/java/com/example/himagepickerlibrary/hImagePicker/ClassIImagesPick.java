@@ -8,7 +8,8 @@ public class ClassIImagesPick {
 
     public interface ImagePick {
         //void onImagesPicked(int requestCode, int resultCode, Bundle bundle);
-        void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images);
+        void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images,
+                            boolean isRequestFromGallery);
     }
 
     private static ClassIImagesPick mInstance;
@@ -39,7 +40,8 @@ public class ClassIImagesPick {
         return false;
     }
 
-    void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images) {
+    void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images,
+                        boolean isRequestFromGallery) {
 
         ClassIImagesPick.ImagePick listener = null;
 
@@ -48,7 +50,7 @@ public class ClassIImagesPick {
         }
 
         if (listener != null) {
-            listener.onImagesPicked(requestCode, resultCode, images);
+            listener.onImagesPicked(requestCode, resultCode, images, isRequestFromGallery);
         }
     }
 

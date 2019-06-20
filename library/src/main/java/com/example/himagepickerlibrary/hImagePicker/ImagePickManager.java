@@ -11,12 +11,16 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.R;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
 
 import models.ConfigIPicker;
 import utils.StringUtils;
@@ -36,6 +40,8 @@ class ImagePickManager {
     //public static final String KEY_FILE_URI = "file_uri";
 
     private ConfigIPicker mConfig;
+
+    private String croppedDestinationPath;
 
     ImagePickManager() {
     }
@@ -104,9 +110,11 @@ class ImagePickManager {
                 switch (item) {
                     case 0:
                         openCameraIntent();
+                        mConfig.setIsRequestFromGallery(false);
                         break;
                     case 1:
                         openGalleryIntent();
+                        mConfig.setIsRequestFromGallery(true);
                         break;
                 }
                 mAlertDialog.dismiss();
@@ -143,12 +151,10 @@ class ImagePickManager {
                 .showCamera(mConfig.showCamera()); // show camera or not (true by default)
         //.imageDirectory(mConfig.dirName());   // captured image directory name ("Camera" folder by default)
         //.imageFullDirectory(mConfig.dirPath()); // can be full path
-        //.imageDirectory("Camera")   // captured image directory name ("Camera" folder by default)
-        //.imageFullDirectory(Environment.getExternalStorageDirectory().getPath()); // can be full path
 
-        /*if (mConfig.include())
-            imagePicker.origin(mConfig.images()); // original selected images, used in multi mode
-        else
+        if (mConfig.getIncludeImages() != null && mConfig.getIncludeImages().size() > 0)
+            imagePicker.origin(mConfig.getIncludeImages()); // original selected images, used in multi mode
+        /*else
             imagePicker.exclude(mConfig.images());*/
 
         return imagePicker;
@@ -156,6 +162,11 @@ class ImagePickManager {
 
     private void openCameraIntent() {
 
+        if (!mConfig.isSingleTrue() && mConfig.getIncludeImages().size() >= mConfig.limit()) {
+            Toast.makeText(mConfig.getActivity(), "Image selection limit exceeded", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
         if (mConfig.getFragment() == null) {
             ImagePicker.cameraOnly()
                     .imageFullDirectory(mConfig.dirPath())
@@ -165,76 +176,36 @@ class ImagePickManager {
                     .imageFullDirectory(mConfig.dirPath())
                     .start(mConfig.getFragment());
         }
-
-        /*Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-
-            File photoFile;
-            try {
-                photoFile = createImageFile(activity);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            Uri photoUri = FileProvider.getUriForFile(activity,
-                    activity.getPackageName() + ".provider", photoFile);
-            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            activity.startActivityForResult(pictureIntent, requestCodeCameraIntent);
-        }*/
     }
-
-    /*private String mCameraImageFilePath;
-
-    private File createImageFile(Context context) throws IOException {
-        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(FileUtils.getNewFileName("image_", ""), ".jpg", storageDir);
-        mCameraImageFilePath = image.getAbsolutePath();
-
-        return image;
-    }*/
 
     private void openGalleryIntent() {
         getImagePicker().start(HImagePicker.RC_IMAGE_PICKER);
-
-        /*Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        ((Activity) context).startActivityForResult(intent, rcGallery);*/
     }
 
-    private String croppedDestinationPath;
-
     void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Initiating paths array
-        String[] paths;
+        ArrayList<Image> images = new ArrayList<>();
 
-        // Preparing paths array from image pick results
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            mConfig.images().clear();
-            mConfig.images().addAll(ImagePicker.getImages(data));
-
-            paths = new String[mConfig.isSingleTrue() ? 1 : mConfig.images().size()];
-
-            for (int i = 0; i < mConfig.images().size(); i++) {
-                paths[i] = mConfig.images().get(i).getPath();
-            }
-
+            // Collecting received images in our array list
+            images = new ArrayList<>(ImagePicker.getImages(data));
+            // Returning images if not crop mode
             if (!mConfig.isCropMode()) {
-                ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, mConfig.images());
+                ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, images, mConfig.isRequestFromGallery());
             }
 
             // Added crop mode in case of set single true
-            if (mConfig.isSingleTrue() && mConfig.isCropMode()) {
+            if (mConfig.isSingleTrue() && mConfig.isCropMode() && images.size() > 0) {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(new File(paths[0]).getAbsolutePath(), options);
+                BitmapFactory.decodeFile(new File(images.get(0).getPath()).getAbsolutePath(), options);
 
                 // Taking cropped destination path globally so can be returned in successful cropping
                 // case.
-                croppedDestinationPath = getDestinationUri(paths[0]);
+                croppedDestinationPath = getDestinationUri(images.get(0).getPath());
 
                 // Start Cropping
-                UCrop.of(Uri.fromFile(new File(paths[0])), Uri.fromFile(new File(croppedDestinationPath)))
-                        //.withAspectRatio(16, 9)
+                UCrop.of(Uri.fromFile(new File(images.get(0).getPath())),
+                        Uri.fromFile(new File(croppedDestinationPath)))
                         .withMaxResultSize(options.outWidth, options.outHeight)
                         .start(mConfig.getActivity());
             } else if (mConfig.isCropMode()) {
@@ -247,32 +218,9 @@ class ImagePickManager {
             // Overwriting crop image path to the array because user should have return the
             // cropped image path instead of original if he enable the crop mode
             File fileCropped = new File(croppedDestinationPath);
-            mConfig.images().get(0).setPath(fileCropped.getPath());
-            mConfig.images().get(0).setName(fileCropped.getName());
-            ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, mConfig.images());
+            images.add(new Image(new Random().nextInt(), fileCropped.getName(), fileCropped.getPath()));
+            ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, images, mConfig.isRequestFromGallery());
         }
-
-
-
-        /*if(mConfig == null || (requestCode != mConfig.getRcCamera()
-                && requestCode != mConfig.getRcGallery())) {
-            return;
-        }
-
-        try {
-            if (resultCode == Activity.RESULT_OK) {
-                Bundle bundle = new Bundle();
-
-                bundle.putString(KEY_FILE_URI,
-                        (requestCode == mConfig.getRcCamera()) ? mCameraImageFilePath :
-                                ((data != null && data.getData() != null) ? data.getData().toString()
-                                        : null));
-                ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, bundle);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Unable to retrieve image");
-            e.printStackTrace();
-        }*/
     }
 
     void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -287,7 +235,7 @@ class ImagePickManager {
         int indexExt = path.indexOf(".", path.length() - 6);
         String substringExt = path.substring(indexExt);
         path = path.replace(substringExt,
-                "-cropped-" + StringUtils.getCurrentTimeStampInFormat("YYYYMMDD-HHmmss")
+                "-cropped-" + StringUtils.getCurrentTimeStampInFormat("yyyymmdd-HHmmssSSS")
                         + substringExt);
         return path;
     }
