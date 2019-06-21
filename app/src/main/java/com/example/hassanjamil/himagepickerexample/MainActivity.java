@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
                 .setDialogStrCamera("Camera")
                 .setDialogStrGallery("Gallery")
                 .setLayoutDirection("ltr")
-                .setLimit(1)
                 .setSingleTrue()
                 .setCropMode(true)
                 .setListener(this)
