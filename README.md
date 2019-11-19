@@ -17,18 +17,17 @@ allprojects {
 ### Code Snippet
 ```android
 ConfigIPicker config = new ConfigIPicker(MainActivity.this)
-                .setLayoutDirection("rtl" | "ltr")
-                .setDialogTitle("Pick Image via")
-                .setDialogStrCamera("Camera")
-                .setDialogStrGallery("Gallery")
-                .setLayoutDirection("ltr")
-                .setSingleTrue()
-                .setCropModeTrue()
-                .setFolderModeTrue()
-                .setListener(this)
-                .setShowCamera(false)
-                .setDirPath(getCustomDirectoryPath(this));
-HImagePicker.getInstance().config(config).load();
+                .setLayoutDirection("rtl" | "ltr")  // Set picker dialog layout direction
+                .setDialogTitle("Pick Image via")   // Set picker dialog title
+                .setDialogStrCamera("Camera")       // Set picker dialog camera option string
+                .setDialogStrGallery("Gallery")     // Set picker dialog's gallery option string
+                .setSingleTrue()                    // Set single for single image selection or limit = 1
+                .setCropModeTrue()       // Set crop mode true after single image selection from camera or gallery, default value is false
+                .setFolderModeTrue()                // Set Folder mode of images for gallery, default value is false
+                .setListener(this)                  // Set callback listener
+                .setShowCamera(false)           
+                .setDirPath(getCustomDirectoryPath(this));  // Pass custom directory path
+HImagePicker.getInstance().config(config).load();   // Trigger picker dialog or start functionality
 ```
 > To use the functionality you can get help from [app](https://github.com/hassaanjamil/HImagePicker/tree/master/app) module of the repo.</br>
 Based on https://github.com/esafirm/android-image-picker
