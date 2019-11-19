@@ -2,7 +2,7 @@
 Android Image Picker Library, provides ease in picking image from android native interfaces of camera and gallery
 
 ### Android Module's Gradle Configuration
-Add dependency in your app module's `build.gradle`
+Add dependency in your app module's `build.gradle`</br>
 `implementation 'com.hassanjamil.himagepicker:library:1.1'`
 
 ### Project/Root Level Gradle Dependency
