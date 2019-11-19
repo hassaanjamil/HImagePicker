@@ -10,3 +10,4 @@ Add artifactory url
 Under Development
 ```
 > To use the functionality you can get help from [app](https://github.com/hassaanjamil/HImagePicker/tree/master/app) module of the repo.
+> Based on https://github.com/esafirm/android-image-picker
