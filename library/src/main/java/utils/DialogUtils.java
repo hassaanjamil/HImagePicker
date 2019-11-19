@@ -3,8 +3,9 @@ package utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.DrawableRes;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.app.AlertDialog;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.himagepickerlibrary.R;

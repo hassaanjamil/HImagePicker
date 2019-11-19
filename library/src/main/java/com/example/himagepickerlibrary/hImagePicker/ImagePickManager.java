@@ -8,10 +8,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
@@ -141,7 +142,7 @@ class ImagePickManager {
             imagePicker = ImagePicker.create(mConfig.getFragment());
         imagePicker.language("en") // Set image picker language
                 .theme(R.style.ef_AppTheme)
-                .folderMode(false) // set folder mode (false by default)
+                .folderMode(mConfig.isFolderModeTrue()) // set folder mode (false by default)
                 .includeVideo(false) // include video (false by default)
                 .toolbarArrowColor(Color.WHITE) // set toolbar arrow up color
                 .toolbarFolderTitle("Folder") // folder selection title
@@ -203,6 +204,9 @@ class ImagePickManager {
                 // case.
                 croppedDestinationPath = getDestinationUri(images.get(0).getPath());
 
+                // Run Media Scanner to scan the cropped file so that it will appear instantly in gallery
+                new MyMediaScanner(mConfig.getActivity(), croppedDestinationPath);
+
                 // Start Cropping
                 UCrop.of(Uri.fromFile(new File(images.get(0).getPath())),
                         Uri.fromFile(new File(croppedDestinationPath)))
@@ -211,7 +215,6 @@ class ImagePickManager {
             } else if (mConfig.isCropMode()) {
                 Log.e("HImagePicker", "Call ConfigIPicker.setSingleTrue(true) to enable crop mode.");
             }
-            //ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, paths);
         }
 
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
@@ -219,6 +222,10 @@ class ImagePickManager {
             // cropped image path instead of original if he enable the crop mode
             File fileCropped = new File(croppedDestinationPath);
             images.add(new Image(new Random().nextInt(), fileCropped.getName(), fileCropped.getPath()));
+
+            // Run Media Scanner to scan the cropped file so that it will appear instantly in gallery
+            new MyMediaScanner(mConfig.getActivity(), croppedDestinationPath);
+
             ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, images, mConfig.isRequestFromGallery());
         }
     }
@@ -232,11 +239,31 @@ class ImagePickManager {
     }
 
     private String getDestinationUri(String path) {
-        int indexExt = path.indexOf(".", path.length() - 6);
-        String substringExt = path.substring(indexExt);
-        path = path.replace(substringExt,
-                "-cropped-" + StringUtils.getCurrentTimeStampInFormat("yyyymmdd-HHmmssSSS")
-                        + substringExt);
-        return path;
+        String path2 = path;
+        String substringExt = null;
+
+        // if extensions exist
+        while (path2.contains(".")) {
+            int indexExt = path2.indexOf(".", 1);
+            substringExt = path2.substring(indexExt);
+            path2 = path2.replace(substringExt, "");
+        }
+
+        // if cropped name already exists in the file path/name
+        String cropSubStr = "-cropped-";
+        String croppedName;
+        if (path2.contains(cropSubStr)) {
+            int index = path2.indexOf(cropSubStr, 1);
+            croppedName = path2.substring(index);
+            path2 = path2.replace(croppedName, "");
+        }
+
+        croppedName = cropSubStr
+                + StringUtils.getCurrentTimeStampInFormat("yyyymmdd-HHmmssSSS")
+                + substringExt;
+
+        path2 = path2 + croppedName;
+
+        return path2;
     }
 }

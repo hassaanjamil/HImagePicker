@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     publishNonDefault true
@@ -21,26 +21,22 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:exifinterface:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    // Material Dialogs Library
-    implementation("com.afollestad.material-dialogs:core:0.9.1.0") {
-        exclude group: 'com.android.support'
-    }
-
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-
-    implementation ('com.github.esafirm.android-image-picker:imagepicker:1.13.0') {
-        exclude module: 'recyclerview-v7'
-    }
-    implementation 'com.github.bumptech.glide:glide:4.5.0'
-
+    implementation 'com.afollestad.material-dialogs:core:0.9.1.0'
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.github.yalantis:ucrop:2.2.3'
 }
 //apply from: ('publish.gradle')

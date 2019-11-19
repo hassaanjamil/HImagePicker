@@ -1,7 +1,8 @@
 package models;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
@@ -28,7 +29,7 @@ public class ConfigIPicker {
     private String dirPath;
     private boolean showCamera;
     private int limit;
-    private boolean singleTrue = false, cropMode = false;
+    private boolean singleTrue = false, cropMode = false, folderMode = false;
     private boolean isGallery = false;
 
     /**
@@ -159,9 +160,7 @@ public class ConfigIPicker {
         return this;
     }
 
-    public boolean isSingleTrue() {
-        return singleTrue;
-    }
+
 
     /**
      * If you want to pick a single picture then you should call the method, you don't need to call setLimit after it.
@@ -171,18 +170,33 @@ public class ConfigIPicker {
         return this;
     }
 
-    public boolean isCropMode() {
-        return cropMode;
+    public boolean isSingleTrue() {
+        return singleTrue;
     }
+
+
+    /**
+     * If you want to pick image from gallery in folder mode
+     */
+    public ConfigIPicker setFolderModeTrue() {
+        this.folderMode = true;
+        return this;
+    }
+
+    public boolean isFolderModeTrue() {
+        return folderMode;
+    }
+
 
     /**
      * To enable cropMode mode you must have to call {@link ConfigIPicker#setSingleTrue()}
-     *
-     * @param crop true to enable cropMode mode
-     * @return
      */
-    public ConfigIPicker setCropMode(boolean crop) {
-        this.cropMode = crop;
+    public ConfigIPicker setCropModeTrue() {
+        this.cropMode = true;
         return this;
+    }
+
+    public boolean isCropMode() {
+        return cropMode;
     }
 }

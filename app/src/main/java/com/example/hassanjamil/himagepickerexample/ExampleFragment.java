@@ -3,13 +3,14 @@ package com.example.hassanjamil.himagepickerexample;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
@@ -21,9 +22,9 @@ import models.ConfigIPicker;
 
 public class ExampleFragment extends Fragment implements ClassIImagesPick.ImagePick {
 
-    TextView tvPickedImages;
-    ArrayList<Image> mImages = new ArrayList<>();
-    int limit = 3;
+    private TextView tvPickedImages;
+    private ArrayList<Image> mImages = new ArrayList<>();
+    private int limit = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +44,7 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
         });
     }
 
-    public void onPickClick() {
+    private void onPickClick() {
         HImagePicker.getInstance()
                 .config(new ConfigIPicker(this)
                         //.setDialogTitle("Pick Image From")
@@ -58,7 +59,7 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
                 .load();
     }
 
-    private String getCustomDirectoryPath(Context context) {
+    private String getCustomDirectoryPath(@NonNull Context context) {
         String externalStoragePath = ((android.os.Environment.getExternalStorageState()
                 .equals(android.os.Environment.MEDIA_MOUNTED)))
                 ? android.os.Environment.getExternalStorageDirectory().getAbsolutePath()

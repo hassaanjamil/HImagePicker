@@ -7,7 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
-import android.support.media.ExifInterface;
+
+import androidx.exifinterface.media.ExifInterface;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -3,10 +3,11 @@ package com.example.hassanjamil.himagepickerexample;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.esafirm.imagepicker.model.Image;
 import com.example.himagepickerlibrary.hImagePicker.ClassIImagesPick;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
                 .setDialogStrGallery("Gallery")
                 .setLayoutDirection("ltr")
                 .setSingleTrue()
-                .setCropMode(true)
+                .setCropModeTrue()
+                .setFolderModeTrue()
                 .setListener(this)
                 .setShowCamera(false)
                 .setDirPath(getCustomDirectoryPath(this));
