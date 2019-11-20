@@ -3,8 +3,9 @@ Android Image Picker Library, provides ease in picking image from android native
 
 ### Android Module's Gradle Configuration
 Add dependency in your app module's `build.gradle`</br>
-`implementation 'com.hassanjamil.himagepicker:library:1.1'`
-
+```groovy
+implementation 'com.hassanjamil.himagepicker:library:1.1'`
+```
 ### Project/Root Level Gradle Dependency
 Add maven url in you root project's `build.gradle`
 ```android
