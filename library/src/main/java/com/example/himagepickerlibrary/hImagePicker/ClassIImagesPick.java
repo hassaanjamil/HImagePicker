@@ -10,6 +10,10 @@ public class ClassIImagesPick {
         //void onImagesPicked(int requestCode, int resultCode, Bundle bundle);
         void onImagesPicked(int requestCode, int resultCode, ArrayList<Image> images,
                             boolean isRequestFromGallery);
+
+        void onCancelled();
+
+        void onDismissed(boolean optionSelected);
     }
 
     private static ClassIImagesPick mInstance;
@@ -51,6 +55,30 @@ public class ClassIImagesPick {
 
         if (listener != null) {
             listener.onImagesPicked(requestCode, resultCode, images, isRequestFromGallery);
+        }
+    }
+
+    void onCancelled() {
+        ClassIImagesPick.ImagePick listener = null;
+
+        if (mListeners != null && mListeners.size() > 0) {
+            listener = mListeners.get(mListeners.size() - 1);
+        }
+
+        if (listener != null) {
+            listener.onCancelled();
+        }
+    }
+
+    void onDismissed(boolean optionSelected) {
+        ClassIImagesPick.ImagePick listener = null;
+
+        if (mListeners != null && mListeners.size() > 0) {
+            listener = mListeners.get(mListeners.size() - 1);
+        }
+
+        if (listener != null) {
+            listener.onDismissed(optionSelected);
         }
     }
 

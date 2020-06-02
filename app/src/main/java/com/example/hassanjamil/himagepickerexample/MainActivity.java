@@ -3,6 +3,7 @@ package com.example.hassanjamil.himagepickerexample;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -66,6 +67,16 @@ public class MainActivity extends AppCompatActivity implements ClassIImagesPick.
             p.append("\n").append(image.getPath());
         }
         tvPickedImages.setText(p);
+    }
+
+    @Override
+    public void onCancelled() {
+        Log.d("MainActivity", "Cancelled");
+    }
+
+    @Override
+    public void onDismissed(boolean optionSelected) {
+        Log.d("MainActivity", "Dismissed " + optionSelected);
     }
 
     @Override

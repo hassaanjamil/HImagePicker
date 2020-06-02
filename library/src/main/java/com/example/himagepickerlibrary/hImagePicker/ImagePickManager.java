@@ -2,7 +2,6 @@ package com.example.himagepickerlibrary.hImagePicker;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -82,7 +81,9 @@ class ImagePickManager {
         return true;
     }
 
+    private boolean optionSelected = false;
     private void dialogImageSourceSelection(final Activity activity, final @NonNull ConfigIPicker config) {
+        optionSelected = false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!PermissionUtils.isStorageCameraPermissionGranted(activity)) {
@@ -106,21 +107,24 @@ class ImagePickManager {
                         : R.style.AlertDialogRTL);
         alertDialogBuilder.setTitle(StringUtils.isValidString(config.getDialogTitle()) ?
                 config.getDialogTitle() : activity.getString(R.string.str_pick_image_from));
-        alertDialogBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                switch (item) {
-                    case 0:
-                        openCameraIntent();
-                        mConfig.setIsRequestFromGallery(false);
-                        break;
-                    case 1:
-                        openGalleryIntent();
-                        mConfig.setIsRequestFromGallery(true);
-                        break;
-                }
-                mAlertDialog.dismiss();
-            }
-        });
+        alertDialogBuilder.setOnDismissListener(dialog -> ClassIImagesPick.getInstance().onDismissed(optionSelected));
+        alertDialogBuilder.setOnCancelListener(dialog -> ClassIImagesPick.getInstance().onDismissed(optionSelected));
+        alertDialogBuilder.setSingleChoiceItems(items, -1,
+                (dialog, item) -> {
+                    switch (item) {
+                        case 0:
+                            optionSelected = true;
+                            openCameraIntent();
+                            mConfig.setIsRequestFromGallery(false);
+                            break;
+                        case 1:
+                            optionSelected = true;
+                            openGalleryIntent();
+                            mConfig.setIsRequestFromGallery(true);
+                            break;
+                    }
+                    mAlertDialog.dismiss();
+                });
         alertDialogBuilder.setCancelable(true);
 
         mAlertDialog = alertDialogBuilder.create();
@@ -213,7 +217,7 @@ class ImagePickManager {
                         .withMaxResultSize(options.outWidth, options.outHeight)
                         .start(mConfig.getActivity());
             } else if (mConfig.isCropMode()) {
-                Log.e("HImagePicker", "Call ConfigIPicker.setSingleTrue(true) to enable crop mode.");
+                Log.e("HImagePicker", "Call ConfigIPicker.setSingleTrue() to enable crop mode.");
             }
         }
 
@@ -227,6 +231,10 @@ class ImagePickManager {
             new MyMediaScanner(mConfig.getActivity(), croppedDestinationPath);
 
             ClassIImagesPick.getInstance().onImagesPicked(requestCode, resultCode, images, mConfig.isRequestFromGallery());
+        }
+
+        if (resultCode == 0 && data == null) {
+            ClassIImagesPick.getInstance().onCancelled();
         }
     }
 

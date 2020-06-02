@@ -86,6 +86,15 @@ public class ExampleFragment extends Fragment implements ClassIImagesPick.ImageP
     }
 
     @Override
+    public void onCancelled() {
+    }
+
+    @Override
+    public void onDismissed(boolean optionSelected) {
+
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         HImagePicker.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults);
