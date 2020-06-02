@@ -11,6 +11,7 @@ Add maven url in you root project's `build.gradle`
 ```android
 allprojects {
     repositories {
+        maven { url 'https://jitpack.io' }
         maven { url "http://api.tplmaps.com:8081/artifactory/example-repo-local" }
     }
 }
